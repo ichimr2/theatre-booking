@@ -45,13 +45,14 @@ router.post('/v1/accounts/open', async context => {
 	context.response.body = JSON.stringify({ status: 'success', msg: 'account created' })
 })
 
+
 router.get('/v1/plays', async context => {
 	console.log('GET /v/1/plays')
-	sql_statement = `select * from play_info`
-	simulated_data = `random`
-	
+	const sql_statement = `SELECT * from play_info`
+	const records = await db.query(sql_statement)
+	console.log(records)
 	context.response.status = 201
-	context.response.body = JSON.stringify({ status: 'success', msg: 'account created', data:simulated_data })
+	context.response.body = JSON.stringify({ status: 'success', msg: 'plays retrieved', data:records })
 })
 
 

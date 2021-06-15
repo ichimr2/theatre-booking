@@ -3,6 +3,9 @@
 import { customiseNavBar, file2Base64, showMessage } from './browserUtility.js'
 
 export async function setup() {
+	const hbs = await (await fetch('./handlebars/home.hbs')).text()
+	const playsData = await getPlays()
+	console.log(playsData)
 	console.log('HOME')
 	const username = localStorage.getItem('username')
 	console.log(`username: ${username}`)
@@ -19,6 +22,13 @@ export async function setup() {
 		window.location.href = '#'
 		customiseNavBar(['home', 'logout'])
 	}
+	
+	const template = Handlebars.compile(hbs)
+    const html = template(playsData)
+	console.log(html)
+	console.log(playsData)
+    document.querySelector('main').innerHTML = html
+	
 }
 
 
