@@ -1,0 +1,37 @@
+<div style="display:flex; flex-direction: row; justify-content:center; align-items:center;">
+    
+    <h1>
+    Latest Plays
+    </h1>
+    
+</div>
+
+{
+
+{}
+
+{}
+
+{}
+
+}
+
+{{#each body}}
+<article class="play-homepage">
+   <a href="#play/{{this.post_id}}">
+   
+    <p class="plays-title">
+    {{this.play_title}}
+    </p>
+     </a>
+        <img class="image" src="../uploads/{{this.post_image_path}}"/>
+         <hr>
+    <hr>
+    <hr>
+    <p> Dated posted: {{this.post_time}}</p>
+    <a href="#article/{{this.post_id}}">Details</a>
+
+    </article>
+{{/each}}
+
+<style>
