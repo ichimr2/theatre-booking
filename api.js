@@ -5,7 +5,7 @@ import { Router } from 'https://deno.land/x/oak@v6.5.1/mod.ts'
 import { extractCredentials, saveFile } from './modules/util.js'
 import { login, register } from './modules/accounts.js'
 import { db } from './modules/db.js'
-// import { addTheatrePlay } from './modules/play.js'
+import { getIndividualPlay } from './modules/plays.js'
 
 
 const router = new Router()
@@ -54,6 +54,29 @@ router.get('/v1/plays', async context => {
 	context.response.status = 201
 	context.response.body = JSON.stringify({ status: 'success', msg: 'plays retrieved', data:records })
 })
+
+router.get("/v1/plays/:id", async context => {
+    let records = await getIndividualPlay(context.params.id)
+    let desc = {
+      "content":'data of a single play',
+      "_links":{
+        "self":{
+          "href":"http://localhost:8080/v1/plays/:id"
+        }
+      }
+	}
+	
+    if (records === undefined){
+        context.response.status = 404
+        context.response.body = JSON.stringify({ status: 'failed', msg: 'Play not found'})
+    }
+    else{
+        console.log(records)
+        context.response.status = 201
+        context.response.body = JSON.stringify({ status: 'success', body : records, msg: 'Play retrieved'})
+    }
+  
+  });
 
 
 router.post('/v1/files', async context => {
