@@ -12,7 +12,9 @@
 <article>
  <img class="image" src="../uploads/{{this.file_name}}"/>
 <h1> {{this.play_id }}</h1>
-<h1> {{this.play_title }}</h1>
+<h1> Title of the Play: {{this.play_title }}</h1>
+<h1> Starting date: {{this.play_time_start }}</h1>
+<h1> Days running: {{this.play_days_running }}</h1>
 <a href="#plays/{{this.play_id}}">Details</a>
 </article>
 
@@ -21,15 +23,3 @@
 {{/each}}
 
 
-<style>
-	
-/* 	
-	{
-    "play_id": 39,
-    "play_title": "title name",
-    "play_text": "desc",
-    "play_added": "2021-06-15T21:47:29.000Z",
-    "file_name": "admin-1623793649785.jpeg",
-    "play_time_start": "2021-06-17T00:00:00.000Z",
-    "play_time_end": "2021-06-26T00:00:00.000Z"
-} */

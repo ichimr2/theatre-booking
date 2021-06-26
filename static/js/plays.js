@@ -3,7 +3,7 @@ import { customiseNavBar, showMessage } from './browserUtility.js'
 let converter 
 
 export async function setup() {
-//      converter = new showdown.Converter({'tables': true, 'tasklists': true, 'strikethrough': true})
+     converter = new showdown.Converter({'tables': true, 'tasklists': true, 'strikethrough': true})
      const username = localStorage.getItem('username')
 	 const hbs = await (await fetch('./handlebars/play.hbs')).text()
 	 console.log(hbs)
@@ -17,10 +17,20 @@ export async function setup() {
     else{
      customiseNavBar(['home','logout'])
     }
+	let datePosted = new Date(playsData.play_added)
+	let playStartDate = new Date(playsData.play_time_start)
+	let playEndDate = new Date(playsData.play_time_end)
+	playsData.play_time_start = playStartDate.toLocaleDateString();
+	playsData.play_time_end = playEndDate.toLocaleDateString();
+	playsData.play_added = datePosted.toLocaleDateString();
+    playsData.play_text = converter.makeHtml(playsData.play_text)
+
+	
 	const template = Handlebars.compile(hbs)
     const html = template(playsData)
     
     document.querySelector('main').innerHTML = html
+    document.querySelector('#markdown').innerHTML = playsData.play_text 
 
    
 }
@@ -41,3 +51,4 @@ async function getPlayData(id){
    const json = await response.json()
    return json.body
 }
+

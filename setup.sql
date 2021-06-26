@@ -27,8 +27,8 @@ CREATE TABLE `play_info` (
   `play_text` TEXT NOT NULL,
   `play_added` timestamp,
 	`file_name` varchar(255) NOT NULL,
-  `play_time_start` datetime,
-  `play_time_end` datetime,
+  `play_time_start` date,
+  `play_time_end` date,
    FOREIGN KEY (play_id) REFERENCES play(play_id)
 );
 

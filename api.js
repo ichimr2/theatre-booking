@@ -49,6 +49,9 @@ router.post('/v1/accounts/open', async context => {
 router.get('/v1/plays', async context => {
 	console.log('GET /v/1/plays')
 	const sql_statement = `SELECT * from play_info`
+	//https://stackoverflow.com/questions/63611529/why-is-mysql-retrieving-a-date-data-type-with-timezone-conversion-added
+	// tldr: The sql module used in this project converts to data inserted to UTC so this is why when we retrieve it we see the minutes,seconds appended to it. bummmer...
+	// solution: manipulate it on the client side. Create new Date object out of it and use its methods such as .getMonth, getFullYear.
 	const records = await db.query(sql_statement)
 	console.log(records)
 	context.response.status = 201
