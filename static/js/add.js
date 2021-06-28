@@ -37,34 +37,30 @@ async function uploadData(event) {
 	const startd = document.querySelector('input[name="startd"]').value
 	const endd = document.querySelector('input[name="endd"]').value
     const extension = data.name.split('.').pop()
-	const startDate = startd.split('-');
-	const endDate = endd.split('-');
-	const startDateYear = parseInt(startDate[0]);
-	const endDateYear = parseInt(endDate[0])
-	const startDateMonth = parseInt(startDate[1]);
-	const endDateMonth = parseInt(endDate[1])
-	const startDateDay = parseInt(startDate[2]);
-	const endDateDay = parseInt(endDate[2])
-	if (endDateYear <= startDateYear) {
-		if(endDateMonth <= startDateMonth) {
-			if(endDateDay < startDateDay) {
-				console.log('stop the exec')
-				showMessage('Invalid Date! ')
-				return
-			}
-		}
+	const startD = new Date(startd)
+	const endD = new Date(endd)
+	if (startD.getTime() > endD.getTime()){
+		showMessage("Invalid Date")
+		return
 	}
-
-	
+// 		
+// 	const startDateYear = parseInt(startDate[0]);
+// 	const endDateYear = parseInt(endDate[0])
+// 	const startDateMonth = parseInt(startDate[1]);
+// 	const endDateMonth = parseInt(endDate[1])
+// 	const startDateDay = parseInt(startDate[2]);
+// 	const endDateDay = parseInt(endDate[2])
+// 	const playTimeStart = startDate.toString().split('T')[0]
+// 	const playTimeEnd = endDate.toString().split('T')[0]	
     data.time = new Date()
     data.desc = 'Submit theatre play POST request'
 	data.base64 = await file2Base64(data)
 	data.user = localStorage.getItem('username')
     data.title = title
 	data.textBody = textBody
-	data.startD = startDate
-	data.endD = endDate
-	console.log(data)
+	data.startD = startd
+	data.endD = endd
+	console.log(data)	
 	const url = '/v1/files'
 	const options = {
 		method: 'POST',

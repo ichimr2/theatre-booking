@@ -13,10 +13,14 @@ async function router() {
 	console.log('HASH CHANGED')
 	const [route, data] = location.hash.split('-')
 	console.log(`${route} - ${data}`)
-	const requestedPage = route ? route.replace('#', '') : 'home'
+	let requestedPage = route ? route.replace('#', '') : 'home'
 	console.log(`page: ${requestedPage}`)
 	const querystring = data ? extractQuerystring(data) : {}
 	console.log(querystring)
+	if (requestedPage.includes('plays')){
+        requestedPage = 'plays'
+        console.log('yep')
+    }
 	document.querySelector('h1').innerHTML = '&nbsp;'
 	document.querySelector('main').innerHTML = await (await fetch(`./html/${requestedPage}.html`)).text()
 	highlightNav(requestedPage)
@@ -38,6 +42,3 @@ function extractQuerystring(data) {
 		return acc
 	}, {})
 }
-
-// function defaultHandler() {return false}
-// function silentHandler()  {return true}

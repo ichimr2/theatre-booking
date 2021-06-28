@@ -138,6 +138,8 @@ input[type="text"], input[type="email"], input[type="password"], textarea, selec
 	margin-top: 0.3em;
 }
 
+
+
 main > button {
 	position: fixed;
 	z-index: 2;
@@ -171,6 +173,26 @@ article {
 	padding-bottom: 3em;
 }
 
+article {
+    margin-left:auto;
+    margin-right:auto;
+	background-color: #CCCC;
+	margin-bottom: 0.5em;
+    width:50%;
+	padding: 1em;
+}
+
+individual-play{
+    
+    margin-left:auto;
+    margin-right:auto;
+	background-color: #CCCC;
+	margin-bottom: 0.5em;
+    
+    width:100%;
+	padding-bottom: 3em;
+}
+
 article > h2 {
 	margin: 0;
 	padding: 0;
@@ -188,6 +210,13 @@ article > p {
 	/* background-color: yellow; */
 	height: 2em;
 	flex-grow: 2;
+}
+
+.image{
+   width:90%;
+   height:auto;
+   object-fit:scale-down;
+
 }
 
 article > button {

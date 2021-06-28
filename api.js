@@ -5,7 +5,7 @@ import { Router } from 'https://deno.land/x/oak@v6.5.1/mod.ts'
 import { extractCredentials, saveFile } from './modules/util.js'
 import { login, register } from './modules/accounts.js'
 import { db } from './modules/db.js'
-// import { addTheatrePlay } from './modules/play.js'
+import { getIndividualPlay } from './modules/plays.js'
 
 
 const router = new Router()
@@ -45,14 +45,43 @@ router.post('/v1/accounts/open', async context => {
 	context.response.body = JSON.stringify({ status: 'success', msg: 'account created' })
 })
 
+
 router.get('/v1/plays', async context => {
-	console.log('GET /v/1/plays')
-	sql_statement = `select * from play_info`
-	simulated_data = `random`
-	
+	console.log('GET /v1/plays')
+	const sql_statement = `SELECT * from play_info`
+	//https://stackoverflow.com/questions/63611529/why-is-mysql-retrieving-a-date-data-type-with-timezone-conversion-added
+	// tldr: The sql module used in this project converts to data inserted to UTC so this is why when we retrieve it we see the minutes,seconds appended to it. bummmer...
+	// solution: manipulate it on the client side. Create new Date object out of it and use its methods such as .getMonth, getFullYear.
+	const records = await db.query(sql_statement)
+	console.log(records)
 	context.response.status = 201
-	context.response.body = JSON.stringify({ status: 'success', msg: 'account created', data:simulated_data })
+	context.response.body = JSON.stringify({ status: 'success', msg: 'plays retrieved', data:records })
 })
+
+router.get("/v1/plays/:id", async context => {
+    let records = await getIndividualPlay(context.params.id)
+    let desc = {
+      "content":'data of a single play',
+	  "format": "an array of objects",
+      "_links":{
+			"self":{
+			  "href":"http://localhost:8080/v1/plays/:id",
+			  "method":"GET"
+        }
+      }
+	}
+	
+    if (records === undefined){
+        context.response.status = 404
+        context.response.body = JSON.stringify({ status: 'failed', msg: 'Play not found'})
+    }
+    else{
+        console.log(records)
+        context.response.status = 201
+        context.response.body = JSON.stringify({ status: 'success', body : records, msg: 'Play retrieved'})
+    }
+  
+  });
 
 
 router.post('/v1/files', async context => {

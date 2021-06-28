@@ -6,32 +6,20 @@
     
 </div>
 
-{
 
-{}
 
-{}
+{{#each data}}
+<article class="individual-play">
+ <img class="image" src="../uploads/{{this.file_name}}"/>
+<h1> {{this.play_id }}</h1>
+<h1> Title of the Play: {{this.play_title }}</h1>
+<h1> Starting date: {{this.play_time_start }}</h1>
+<h1> Days running: {{this.play_days_running }}</h1>
+<a href="#plays/{{this.play_id}}">Details</a>
+</article>
 
-{}
 
-}
 
-{{#each body}}
-<article class="play-homepage">
-   <a href="#play/{{this.post_id}}">
-   
-    <p class="plays-title">
-    {{this.play_title}}
-    </p>
-     </a>
-        <img class="image" src="../uploads/{{this.post_image_path}}"/>
-         <hr>
-    <hr>
-    <hr>
-    <p> Dated posted: {{this.post_time}}</p>
-    <a href="#article/{{this.post_id}}">Details</a>
-
-    </article>
 {{/each}}
 
-<style>
+
