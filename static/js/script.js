@@ -42,6 +42,3 @@ function extractQuerystring(data) {
 		return acc
 	}, {})
 }
-
-// function defaultHandler() {return false}
-// function silentHandler()  {return true}

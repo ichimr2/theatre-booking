@@ -47,7 +47,7 @@ router.post('/v1/accounts/open', async context => {
 
 
 router.get('/v1/plays', async context => {
-	console.log('GET /v/1/plays')
+	console.log('GET /v1/plays')
 	const sql_statement = `SELECT * from play_info`
 	//https://stackoverflow.com/questions/63611529/why-is-mysql-retrieving-a-date-data-type-with-timezone-conversion-added
 	// tldr: The sql module used in this project converts to data inserted to UTC so this is why when we retrieve it we see the minutes,seconds appended to it. bummmer...
@@ -62,9 +62,11 @@ router.get("/v1/plays/:id", async context => {
     let records = await getIndividualPlay(context.params.id)
     let desc = {
       "content":'data of a single play',
+	  "format": "an array of objects",
       "_links":{
-        "self":{
-          "href":"http://localhost:8080/v1/plays/:id"
+			"self":{
+			  "href":"http://localhost:8080/v1/plays/:id",
+			  "method":"GET"
         }
       }
 	}
