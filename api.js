@@ -17,6 +17,25 @@ router.get('/', async context => {
 })
 
 router.get('/v1/accounts', async context => {
+	 let desc = {
+      "desc":"Check credentials for validation",
+      "return":"status of request",
+        "_links":{
+        "self":{
+          "href":"http://localhost:8080/v1/accounts/",
+          "method":"GET"
+        },
+        "relative": {
+                "locations":[
+                     {"href": "http://localhost:8080/v1/plays/",
+                     "desc": "Create an account",
+                     "parameters" : ["username", "password"],
+                    "method": "POST"
+                     }]
+
+        }
+      }
+     }
 	console.log('GET /accounts')
 	const token = context.request.headers.get('Authorization')
 	console.log(`auth: ${token}`)
@@ -36,6 +55,25 @@ router.get('/v1/accounts', async context => {
 })
 
 router.post('/v1/accounts/open', async context => {
+	let desc =	{
+      "desc":"Create an account",
+      "parameters": ["username", "password"],
+      "return":"status of request",
+        "_links":{
+        "self":{
+          "href":"http://localhost:8080/v1/accounts/",
+          "method":"POST"
+        },
+        "relative": {
+                "locations":[
+                     {"href": "http://localhost:8080/v1/accounts/",
+                     "desc": "Check credentials for validation",
+                     "parameters" : ["username", "password"],
+                    "method": "GET"
+                     }]
+        }
+      }
+    }
 	console.log('POST /accounts')
 	const body  = await context.request.body()
 	const data = await body.value
@@ -47,6 +85,25 @@ router.post('/v1/accounts/open', async context => {
 
 
 router.get('/v1/plays', async context => {
+	let desc = {
+      "content":"All plays available in the database",
+      "format":"An array of objects",
+      "fields": {"play_id":"play id",
+                 "play_title": "play title",
+				 "play_time_start": "starting date of the play",
+				 "days_running": "for how long is the play running"
+	},
+      "_links":{
+        "self":{
+          "href":"http://localhost:8080/api/v1/articles",
+	  "method":"GET"
+}
+      },
+	"relative":{
+	"href":"http://localhost:8080/api/v1/articles/:id",
+	"desc":"Retrieve an individual article"
+	}
+      }
 	console.log('GET /v1/plays')
 	const sql_statement = `SELECT * from play_info`
 	//https://stackoverflow.com/questions/63611529/why-is-mysql-retrieving-a-date-data-type-with-timezone-conversion-added
@@ -59,18 +116,29 @@ router.get('/v1/plays', async context => {
 })
 
 router.get("/v1/plays/:id", async context => {
-    let records = await getIndividualPlay(context.params.id)
-    let desc = {
-      "content":'data of a single play',
-	  "format": "an array of objects",
-      "_links":{
-			"self":{
-			  "href":"http://localhost:8080/v1/plays/:id",
-			  "method":"GET"
-        }
+	  let desc = {
+      "content":"data of a single play",
+      "fields": {"play_id":"play id",
+                 "play_title": "play title",
+                 "post_text": "play content",
+                 "play_added": "date play was created",
+                 "file_name":  "name of the uploaded picture for this play",
+				 "play_time_start": "starting date of the play",
+				 "play_time_end": "ending date of the play"
+	},
+	"_links":{
+        "self":{
+          "href":"http://localhost:8080/v1/plays/:id",
+	  "method": "GET"
+        },
+	"relative": {
+		"href": "http://localhost:8080/v1/plays/",
+		"desc": "Retrieve all plays from the database",
+		"method": "GET"
+		}
       }
-	}
-	
+    }
+    let records = await getIndividualPlay(context.params.id)
     if (records === undefined){
         context.response.status = 404
         context.response.body = JSON.stringify({ status: 'failed', msg: 'Play not found'})
