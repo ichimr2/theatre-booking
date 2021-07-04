@@ -27,7 +27,7 @@ router.get('/v1/accounts', async context => {
         },
         "relative": {
                 "locations":[
-                     {"href": "http://localhost:8080/v1/plays/",
+                     {"href": "http://localhost:8080/v1/accounts/open/",
                      "desc": "Create an account",
                      "parameters" : ["username", "password"],
                     "method": "POST"
@@ -41,11 +41,8 @@ router.get('/v1/accounts', async context => {
 	console.log(`auth: ${token}`)
 	try {
 		const credentials = extractCredentials(token)
-		console.log(credentials)
 		const username = await login(credentials)
-		console.log(`username: ${username}`)
         context.cookies.set('Authorization', token)
-        console.log(context.cookies)
 		context.response.body = JSON.stringify({ status: 'success', data: { username } }, null, 2)
 	} catch(err) {
         console.log(err)
@@ -95,20 +92,17 @@ router.get('/v1/plays', async context => {
 	},
       "_links":{
         "self":{
-          "href":"http://localhost:8080/api/v1/articles",
+          "href":"http://localhost:8080/v1/plays",
 	  "method":"GET"
 }
       },
 	"relative":{
-	"href":"http://localhost:8080/api/v1/articles/:id",
-	"desc":"Retrieve an individual article"
+	"href":"http://localhost:8080/v1/plays/:id",
+	"desc":"Retrieve an individual play"
 	}
       }
 	console.log('GET /v1/plays')
 	const sql_statement = `SELECT * from play_info`
-	//https://stackoverflow.com/questions/63611529/why-is-mysql-retrieving-a-date-data-type-with-timezone-conversion-added
-	// tldr: The sql module used in this project converts to data inserted to UTC so this is why when we retrieve it we see the minutes,seconds appended to it. bummmer...
-	// solution: manipulate it on the client side. Create new Date object out of it and use its methods such as .getMonth, getFullYear.
 	const records = await db.query(sql_statement)
 	console.log(records)
 	context.response.status = 201

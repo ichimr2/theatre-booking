@@ -19,7 +19,6 @@ async function router() {
 	console.log(querystring)
 	if (requestedPage.includes('plays')){
         requestedPage = 'plays'
-        console.log('yep')
     }
 	document.querySelector('h1').innerHTML = '&nbsp;'
 	document.querySelector('main').innerHTML = await (await fetch(`./html/${requestedPage}.html`)).text()

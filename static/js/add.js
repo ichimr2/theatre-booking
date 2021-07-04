@@ -39,19 +39,19 @@ async function uploadData(event) {
     const extension = data.name.split('.').pop()
 	const startD = new Date(startd)
 	const endD = new Date(endd)
+	
+	if (allowedExtensions.indexOf(extension) > -1) {
+    showMessage("File Uploaded")
+	} else {
+    showMessage("File type not supported. Select a picture.")
+	return
+	}
+		
 	if (startD.getTime() > endD.getTime()){
 		showMessage("Invalid Date")
 		return
 	}
-// 		
-// 	const startDateYear = parseInt(startDate[0]);
-// 	const endDateYear = parseInt(endDate[0])
-// 	const startDateMonth = parseInt(startDate[1]);
-// 	const endDateMonth = parseInt(endDate[1])
-// 	const startDateDay = parseInt(startDate[2]);
-// 	const endDateDay = parseInt(endDate[2])
-// 	const playTimeStart = startDate.toString().split('T')[0]
-// 	const playTimeEnd = endDate.toString().split('T')[0]	
+		
     data.time = new Date()
     data.desc = 'Submit theatre play POST request'
 	data.base64 = await file2Base64(data)
@@ -60,7 +60,6 @@ async function uploadData(event) {
 	data.textBody = textBody
 	data.startD = startd
 	data.endD = endd
-	console.log(data)	
 	const url = '/v1/files'
 	const options = {
 		method: 'POST',
