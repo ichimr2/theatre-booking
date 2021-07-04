@@ -43,11 +43,11 @@ router.get('/v1/accounts', async context => {
 		const credentials = extractCredentials(token)
 		const username = await login(credentials)
         context.cookies.set('Authorization', token)
-		context.response.body = JSON.stringify({ status: 'success', data: { username } }, null, 2)
+		context.response.body = JSON.stringify({ status: 'success', msg: desc, data: { username } }, null, 2)
 	} catch(err) {
         console.log(err)
 		context.response.status = 401
-		context.response.body = JSON.stringify({ status: 'unauthorised', msg: err.msg })
+		context.response.body = JSON.stringify({ status: 'unauthorised', msg: desc, err:err.message })
 	}
 })
 
@@ -77,7 +77,7 @@ router.post('/v1/accounts/open', async context => {
 	console.log(data)
 	await register(data)
 	context.response.status = 201
-	context.response.body = JSON.stringify({ status: 'success', msg: 'account created' })
+	context.response.body = JSON.stringify({ status: 'success', msg: desc })
 })
 
 
@@ -106,7 +106,7 @@ router.get('/v1/plays', async context => {
 	const records = await db.query(sql_statement)
 	console.log(records)
 	context.response.status = 201
-	context.response.body = JSON.stringify({ status: 'success', msg: 'plays retrieved', data:records })
+	context.response.body = JSON.stringify({ status: 'success', msg: desc, data:records })
 })
 
 router.get("/v1/plays/:id", async context => {
@@ -135,25 +135,43 @@ router.get("/v1/plays/:id", async context => {
     let records = await getIndividualPlay(context.params.id)
     if (records === undefined){
         context.response.status = 404
-        context.response.body = JSON.stringify({ status: 'failed', msg: 'Play not found'})
+        context.response.body = JSON.stringify({ status: 'failed', msg: desc})
     }
     else{
         console.log(records)
         context.response.status = 201
-        context.response.body = JSON.stringify({ status: 'success', body : records, msg: 'Play retrieved'})
+        context.response.body = JSON.stringify({ status: 'success', body : records, msg: desc})
     }
   
   });
 
 
 router.post('/v1/files', async context => {
+	let desc = {
+      "content":"uploaded form data",
+      "fields": {"time":"local time",
+                 "desc": "http request type",
+                 "base64": "image encoded in base64",
+                 "user": "user who submitted the form",
+                 "title":  "play title",
+				 "startD": "starting date of the play",
+				 "endD": "ending date of the play"
+	},
+	"_links":{
+        "self":{
+          "href":"http://localhost:8080/v1/files",
+	  "method": "POST"
+        }
+      }
+    }
 	console.log('POST /files')
 	try {
 		const token = context.request.headers.get('Authorization')
 		console.log(`auth: ${token}`)
 		const body  = await context.request.body()
 		const data = await body.value
-// 		console.log(data)
+		console.log(data)
+		console.log('sssssssssssssssssssssssssss')
 		const filename = saveFile(data.base64, data.user)
 		const sql_statement = `INSERT INTO play(user_name) VALUES ("${data.user}");`
  		const record = await db.query(sql_statement)
@@ -163,7 +181,7 @@ router.post('/v1/files', async context => {
 		const sql_statement2 = `INSERT INTO play_info(play_id, play_title, play_text, file_name, play_time_start, play_time_end) VALUES ("${most_recent_playid}", "${data.title}", "${data.textBody}", "${filename}", "${data.startD}", "${data.endD}")`
 		const record3 = await db.query(sql_statement2)
 		context.response.status = 201
-		context.response.body = JSON.stringify({ status: 'success', msg: 'file uploaded' })
+		context.response.body = JSON.stringify({ status: 'success', msg: desc })
 	} catch(err) {
 		console.log(err)
 		context.response.status = 401

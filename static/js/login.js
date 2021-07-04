@@ -21,6 +21,7 @@ async function login() {
 		const response = await fetch(url, options)
 // 		console.log(response)
 		const json = await response.json()
+		console.log(json)
 		if(response.status === 200) {
 			localStorage.setItem('username', json.data.username)
 			localStorage.setItem('authorization', token)
