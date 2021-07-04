@@ -1,5 +1,0 @@
-// ****ichimr2 - Theatre****
-*Direct topic link: https://github.coventry.ac.uk/agile/projects/blob/master/20%20Theatre.md
-*Attempted stages 1, 2 and 3
-*Heroku Link: https://ichimr2-sem3.herokuapp.com/ 
-//
